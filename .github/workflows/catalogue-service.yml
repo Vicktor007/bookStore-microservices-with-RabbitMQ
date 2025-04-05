@@ -16,14 +16,14 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
-      steps:
-        - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Setup Java 21
-          uses: actions/setup-java@v4
-          with:
-            java-version: '21'
-            distribution: 'temurin'
-            cache: 'maven'
-        - name: Build with Maven
-          run: ./mvnw -ntp verify
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Build with Maven
+        run: ./mvnw -ntp verify
