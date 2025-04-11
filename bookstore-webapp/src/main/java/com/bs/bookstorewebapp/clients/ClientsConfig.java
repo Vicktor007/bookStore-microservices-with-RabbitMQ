@@ -1,7 +1,8 @@
-package com.bs.bookstorewebapp.clients.catalogue;
+package com.bs.bookstorewebapp.clients;
 
 import com.bs.bookstorewebapp.ApplicationProperties;
-import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
+import com.bs.bookstorewebapp.clients.catalogue.CatalogueServiceClient;
+import com.bs.bookstorewebapp.clients.orders.OrderServiceClient;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.boot.web.client.RestClientCustomizer;
@@ -36,6 +37,13 @@ public class ClientsConfig {
          RestClient restClient = clientBuilder.build();
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient)).build();
         return factory.createClient(CatalogueServiceClient.class);
+    }
+
+    @Bean
+    OrderServiceClient orderServiceClient(RestClient.Builder clientBuilder) {
+         RestClient restClient = clientBuilder.build();
+         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient)).build();
+         return factory.createClient(OrderServiceClient.class);
     }
 
 }
