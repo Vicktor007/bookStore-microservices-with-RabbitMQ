@@ -1,4 +1,7 @@
 package com.bs.bookstorewebapp;
 
-public class ApplicationProperties {
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "bookstore")
+public record ApplicationProperties(String apiGatewayUrl) {
 }
