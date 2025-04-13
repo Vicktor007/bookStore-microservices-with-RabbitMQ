@@ -1,24 +1,30 @@
 package com.bs.orderservice.web.controllers;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
 import com.bs.orderservice.AbstractIT;
+import com.bs.orderservice.domain.records.OrderSummary;
+import com.bs.orderservice.testdata.TestDataFactory;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.jdbc.Sql;
 
-import java.math.BigDecimal;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
-
-class OrderControllerTest extends AbstractIT {
+@Sql("/test-orders.sql")
+class OrderControllerTests extends AbstractIT {
 
     @Nested
-    class CreateOrderTests  {
+    class CreateOrderTests {
         @Test
         void shouldCreateOrderSuccessfully() {
-//            mockGetProductByCode("P100", "Product 1", new BigDecimal("25.50"));
+            mockGetProductByCode("P100", "Product 1", new BigDecimal("25.50"));
             var payload =
                     """
                         {
@@ -46,7 +52,7 @@ class OrderControllerTest extends AbstractIT {
                         }
                     """;
             given().contentType(ContentType.JSON)
-//                    .header("Authorization", "Bearer " + getToken())
+                    .header("Authorization", "Bearer " + getToken())
                     .body(payload)
                     .when()
                     .post("/api/orders")
@@ -55,17 +61,49 @@ class OrderControllerTest extends AbstractIT {
                     .body("orderNumber", notNullValue());
         }
 
-//        @Test
-//        void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
-//            var payload = TestDataFactory.createOrderRequestWithInvalidCustomer();
-//            given().contentType(ContentType.JSON)
-////                    .header("Authorization", "Bearer " + getToken())
-//                    .body(payload)
-//                    .when()
-//                    .post("/api/orders")
-//                    .then()
-//                    .statusCode(HttpStatus.BAD_REQUEST.value());
-//        }
+        @Test
+        void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
+            var payload = TestDataFactory.createOrderRequestWithInvalidCustomer();
+            given().contentType(ContentType.JSON)
+                    .header("Authorization", "Bearer " + getToken())
+                    .body(payload)
+                    .when()
+                    .post("/api/orders")
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
     }
 
+    @Nested
+    class GetOrdersTests {
+        @Test
+        void shouldGetOrdersSuccessfully() {
+            List<OrderSummary> orderSummaries = given().when()
+                    .header("Authorization", "Bearer " + getToken())
+                    .get("/api/orders")
+                    .then()
+                    .statusCode(200)
+                    .extract()
+                    .body()
+                    .as(new TypeRef<>() {});
+
+            assertThat(orderSummaries).hasSize(2);
+        }
+    }
+
+    @Nested
+    class GetOrderByOrderNumberTests {
+        String orderNumber = "order-123";
+
+        @Test
+        void shouldGetOrderSuccessfully() {
+            given().when()
+                    .header("Authorization", "Bearer " + getToken())
+                    .get("/api/orders/{orderNumber}", orderNumber)
+                    .then()
+                    .statusCode(200)
+                    .body("orderNumber", is(orderNumber))
+                    .body("items.size()", is(2));
+        }
+    }
 }

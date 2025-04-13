@@ -1,6 +1,5 @@
 package com.bs.orderservice.domain.records;
 
-
 public enum OrderEventType {
     ORDER_CREATED,
     ORDER_DELIVERED,

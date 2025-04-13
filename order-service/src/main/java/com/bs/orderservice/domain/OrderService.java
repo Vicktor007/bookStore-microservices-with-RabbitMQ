@@ -1,21 +1,19 @@
 package com.bs.orderservice.domain;
 
 import com.bs.orderservice.domain.records.*;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
 
 @Service
 @Transactional
 public class OrderService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
-    private static final List<String > DELIVERY_ALLOWED_COUNTRIES = List.of("NIGERIA","INDIA","BRAZIL","USA");
+    private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("NIGERIA", "INDIA", "BRAZIL", "USA");
 
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
@@ -36,7 +34,6 @@ public class OrderService {
         OrderCreatedEvent orderCreatedEvent = OrderEventMapper.buildOrderCreatedEvent(order);
         orderEventService.save(orderCreatedEvent);
         return new OrderResponse(order.getOrderNumber());
-
     }
 
     public List<OrderSummary> findOrders(String userName) {
@@ -44,9 +41,9 @@ public class OrderService {
     }
 
     public Optional<OrderDTO> findUserOrder(String userName, String orderNumber) {
-        return orderRepository.findOrderByUserNameAndOrderNumber(userName,orderNumber)
+        return orderRepository
+                .findOrderByUserNameAndOrderNumber(userName, orderNumber)
                 .map(OrderMapper::convertToDTO);
-
     }
 
     public void processNewOrders() {

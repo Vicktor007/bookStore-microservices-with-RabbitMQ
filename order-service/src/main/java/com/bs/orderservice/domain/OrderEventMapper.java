@@ -1,7 +1,6 @@
 package com.bs.orderservice.domain;
 
 import com.bs.orderservice.domain.records.*;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -16,8 +15,7 @@ public class OrderEventMapper {
                 getOrderItems(orderEntity),
                 orderEntity.getCustomer(),
                 orderEntity.getDeliveryAddress(),
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
 
     static OrderDeliveredEvent buildOrderDeliveredEvent(OrderEntity orderEntity) {
@@ -27,11 +25,8 @@ public class OrderEventMapper {
                 getOrderItems(orderEntity),
                 orderEntity.getCustomer(),
                 orderEntity.getDeliveryAddress(),
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
-
-
 
     static OrderCancelledEvent buildOrderCancelledEvent(OrderEntity orderEntity, String reason) {
         return new OrderCancelledEvent(
@@ -41,8 +36,7 @@ public class OrderEventMapper {
                 orderEntity.getCustomer(),
                 orderEntity.getDeliveryAddress(),
                 reason,
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
 
     static OrderErrorEvent buildOrderErrorEvent(OrderEntity orderEntity, String reason) {
@@ -53,17 +47,12 @@ public class OrderEventMapper {
                 orderEntity.getCustomer(),
                 orderEntity.getDeliveryAddress(),
                 reason,
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
-
 
     private static Set<OrderItem> getOrderItems(OrderEntity orderEntity) {
         return orderEntity.getItems().stream()
-                .map(item -> new OrderItem(item.getCode(),
-                        item.getName(),
-                        item.getPrice(),
-                        item.getQuantity()))
+                .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
     }
 }

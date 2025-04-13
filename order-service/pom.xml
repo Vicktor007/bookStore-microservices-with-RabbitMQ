@@ -176,6 +176,23 @@
 			<version>3.6.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>${wiremock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		<groupId>org.wiremock.integrations.testcontainers</groupId>
+		<artifactId>wiremock-testcontainers-module</artifactId>
+		<version>${wiremock-testcontainers.version}</version>
+		<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

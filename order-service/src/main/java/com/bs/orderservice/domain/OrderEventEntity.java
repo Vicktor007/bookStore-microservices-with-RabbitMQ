@@ -1,6 +1,5 @@
 package com.bs.orderservice.domain;
 
-
 import com.bs.orderservice.domain.records.OrderEventType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

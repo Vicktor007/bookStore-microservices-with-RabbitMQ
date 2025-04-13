@@ -1,6 +1,5 @@
 package com.bs.orderservice.domain.records;
 
-
 import jakarta.validation.constraints.NotBlank;
 
 public record Address(
