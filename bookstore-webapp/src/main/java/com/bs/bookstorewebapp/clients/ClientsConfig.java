@@ -3,6 +3,7 @@ package com.bs.bookstorewebapp.clients;
 import com.bs.bookstorewebapp.ApplicationProperties;
 import com.bs.bookstorewebapp.clients.catalogue.CatalogueServiceClient;
 import com.bs.bookstorewebapp.clients.orders.OrderServiceClient;
+import java.time.Duration;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.boot.web.client.RestClientCustomizer;
@@ -12,16 +13,14 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import java.time.Duration;
-
 @Configuration
 public class ClientsConfig {
 
     private final ApplicationProperties applicationProperties;
 
-     ClientsConfig(ApplicationProperties applicationProperties) {
-         this.applicationProperties = applicationProperties;
-     }
+    ClientsConfig(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
 
     @Bean
     RestClientCustomizer restClientCustomizer() {
@@ -34,16 +33,17 @@ public class ClientsConfig {
 
     @Bean
     CatalogueServiceClient catalogueServiceClient(RestClient.Builder clientBuilder) {
-         RestClient restClient = clientBuilder.build();
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient)).build();
+        RestClient restClient = clientBuilder.build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient))
+                .build();
         return factory.createClient(CatalogueServiceClient.class);
     }
 
     @Bean
     OrderServiceClient orderServiceClient(RestClient.Builder clientBuilder) {
-         RestClient restClient = clientBuilder.build();
-         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient)).build();
-         return factory.createClient(OrderServiceClient.class);
+        RestClient restClient = clientBuilder.build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient))
+                .build();
+        return factory.createClient(OrderServiceClient.class);
     }
-
 }

@@ -1,4 +1,3 @@
-
 name: 'bookStore-microservices'
 services:
   catalogue-db:

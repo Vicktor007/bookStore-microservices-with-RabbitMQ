@@ -17,40 +17,37 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class SecurityConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
-     SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
+    SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-         http.authorizeHttpRequests(authorizeRequests ->
-                         authorizeRequests.requestMatchers(
-
-                 "/js/*",
-                 "/css/*",
-                 "/images/*",
-                 "/error",
-                 "/webjars/**",
-                 "/",
-                 "/actuator/**",
-                 "/products/**",
-                 "/api/products/**"
-
-         )
-                 .permitAll()
-                 .anyRequest()
-                 .authenticated())
-                 .cors(CorsConfigurer::disable)
-                 .csrf(CsrfConfigurer::disable)
-                 .oauth2Login(Customizer.withDefaults())
-                 .logout(logout -> logout.clearAuthentication(true)
-                         .invalidateHttpSession(true)
-                         .logoutSuccessHandler(oidcLogoutSuccsHandler()));
-         return http.build();
+        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(
+                                "/js/*",
+                                "/css/*",
+                                "/images/*",
+                                "/error",
+                                "/webjars/**",
+                                "/",
+                                "/actuator/**",
+                                "/products/**",
+                                "/api/products/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .cors(CorsConfigurer::disable)
+                .csrf(CsrfConfigurer::disable)
+                .oauth2Login(Customizer.withDefaults())
+                .logout(logout -> logout.clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler()));
+        return http.build();
     }
 
-    private LogoutSuccessHandler oidcLogoutSuccsHandler() {
-        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler  =
+    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
+        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
                 new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
         oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}");
         return oidcLogoutSuccessHandler;

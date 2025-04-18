@@ -6,7 +6,9 @@ vars:
   DC_DIR: "deployment/docker-compose"
   INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
   APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
-  MONITORING_DC_FILE: '{{ if eq .GOOS "windows}}timeout{{else}}sleep{{end}}'
+  MONITORING_DC_FILE: '{{ if eq .GOOS "windows"}}timeout{{else}}sleep{{end}}'
+  SLEEP_CMD: '{{if eq .GOOS "windows"}}timeout{{else}}sleep{{end}}'
+
 
 
 tasks:
@@ -21,6 +23,7 @@ tasks:
     cmds:
       - "{{.MVNW}} spotless:apply"
   build:
+    deps: [format]  # Ensures formatting runs first
     cmds:
       - "{{.MVNW}} -pl catalogue-service spring-boot:build-image -DskipTests"
       - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"

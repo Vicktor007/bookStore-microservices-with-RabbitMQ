@@ -3,14 +3,13 @@ package com.bs.bookstorewebapp.web.controllers;
 import com.bs.bookstorewebapp.clients.orders.*;
 import com.bs.bookstorewebapp.configurations.SecurityHelper;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class OrderController {
@@ -24,13 +23,15 @@ public class OrderController {
         this.securityHelper = securityHelper;
     }
 
-    private Map<String, ?> getHeaders(){
+    private Map<String, ?> getHeaders() {
         String accessToken = securityHelper.getAccesToken();
-        return Map.of("Authorization","Bearer " + accessToken);
+        return Map.of("Authorization", "Bearer " + accessToken);
     }
 
     @GetMapping("/cart")
-    String cart() {return "cart";}
+    String cart() {
+        return "cart";
+    }
 
     @PostMapping("/api/orders")
     @ResponseBody
@@ -39,7 +40,7 @@ public class OrderController {
         return orderService.createOrder(getHeaders(), orderRequest);
     }
 
-    @GetMapping("/api/orders/{orderNumber}")
+    @GetMapping("/orders/{orderNumber}")
     String showOrderDetails(@PathVariable String orderNumber, Model model) {
         model.addAttribute("orderNumber", orderNumber);
         return "order_Details";

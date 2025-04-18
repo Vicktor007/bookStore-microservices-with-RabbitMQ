@@ -1,5 +1,4 @@
-version: "3.8"
-name: 'BookStore-microservices'
+name: 'bookStore-microservices'
 services:
   catalogue-service:
     image: victor140/bookstore-catalogue-service

@@ -1,19 +1,35 @@
 package com.bs.orderservice;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.util.Collections.singletonList;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import io.restassured.RestAssured;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
+import org.keycloak.OAuth2Constants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import wiremock.com.fasterxml.jackson.annotation.JsonProperty;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import(ContainersConfig.class)
+@Import(TestContainersConfiguration.class)
 @AutoConfigureMockMvc
 public abstract class AbstractIT {
     static final String CLIENT_ID = "bookstore-webapp";
-    static final String CLIENT_SECRET = "P1sibsIrELBhmvK18BOzw1bUl96DcP2z";
+    static final String CLIENT_SECRET = "LTqQzIrzJDc0wnwHUCUqUND6qkwnJFfG";
     static final String USERNAME = "siva";
     static final String PASSWORD = "siva1234";
 
